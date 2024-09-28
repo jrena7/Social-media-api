@@ -4,6 +4,7 @@ import com.example.socialmedia.dto.LoginRequest;
 import com.example.socialmedia.model.User;
 import com.example.socialmedia.service.UserService;
 import com.example.socialmedia.service.impl.AuthService;
+import com.example.socialmedia.service.impl.InvalidTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,16 @@ public class LoginController {
 
     private final AuthService authService;
 
+    private final InvalidTokenService invalidTokenService;
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    public LoginController(UserService userService, AuthService authService) {
+    public LoginController(UserService userService, AuthService authService, InvalidTokenService invalidTokenService) {
         this.userService = userService;
         this.authService = authService;
+        this.invalidTokenService = invalidTokenService;
     }
 
     @PostMapping("/register")
@@ -50,6 +54,9 @@ public class LoginController {
     public ResponseEntity<?> logout(@PathVariable String username) {
         // Clear security context
         SecurityContextHolder.clearContext();
+
+        // Add token to invalid token list
+        invalidTokenService.addToken(username);
 
         return ResponseEntity.ok("Logout successful");
     }
