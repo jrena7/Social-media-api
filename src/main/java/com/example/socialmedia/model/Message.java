@@ -25,4 +25,8 @@ public class Message {
         this.content = content;
         this.timestamp = LocalDateTime.now();
     }
+
+    public boolean isSender(String senderId) {
+        return this.senderId.equals(senderId);
+    }
 }

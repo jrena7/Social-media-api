@@ -106,7 +106,7 @@ public class MessageServiceImp implements MessageService {
     private void messageBelongsToUser(String username, Message message) {
         User user = userService.findUserByName(username);
 
-        if (!message.getSenderId().equals(user.getId())) {
+        if (!message.isSender(user.getId())) {
             throw new IllegalArgumentException("Cannot change a message that is not yours.");
         }
     }

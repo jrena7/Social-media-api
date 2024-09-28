@@ -37,6 +37,7 @@ public class UserServiceImp implements UserService {
         userRepository.save(userToCreate);
     }
 
+    // Method to validate user details
     private void validateDetails (User userToCreate) {
         if (!isValidEmail(userToCreate.getEmail())) {
             throw new IllegalArgumentException("Invalid email format");
@@ -226,5 +227,4 @@ public class UserServiceImp implements UserService {
         userRepository.save(user);
         userRepository.save(removeUser);
     }
-
 }
