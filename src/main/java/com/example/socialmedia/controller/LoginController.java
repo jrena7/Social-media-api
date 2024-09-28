@@ -5,6 +5,7 @@ import com.example.socialmedia.model.User;
 import com.example.socialmedia.service.UserService;
 import com.example.socialmedia.service.impl.AuthService;
 import com.example.socialmedia.service.impl.InvalidTokenService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,12 +52,16 @@ public class LoginController {
     }
 
     @PostMapping("/logout/{username}")
-    public ResponseEntity<?> logout(@PathVariable String username) {
+    public ResponseEntity<?> logout(@PathVariable String username, HttpServletRequest request) {
+        // Get token from Authorization header
+        String authHeader = request.getHeader("Authorization");
+        String token = authHeader.substring(7);
+
         // Clear security context
         SecurityContextHolder.clearContext();
 
         // Add token to invalid token list
-        invalidTokenService.addToken(username);
+        invalidTokenService.addToken(token);
 
         return ResponseEntity.ok("Logout successful");
     }

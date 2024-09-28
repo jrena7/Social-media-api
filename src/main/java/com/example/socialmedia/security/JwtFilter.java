@@ -1,6 +1,7 @@
 package com.example.socialmedia.security;
 
 import com.example.socialmedia.service.impl.CustomUserDetailsService;
+import com.example.socialmedia.service.impl.InvalidTokenService;
 import com.example.socialmedia.service.impl.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,6 +25,9 @@ public class JwtFilter extends OncePerRequestFilter {
     private JWTService jwtService;
 
     @Autowired
+    private InvalidTokenService invalidTokenService;
+
+    @Autowired
     ApplicationContext applicationContext;
 
 
@@ -41,6 +45,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // If the username is not null and the user is not already authenticated
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            // Check if the token is invalid
+            if (invalidTokenService.isInvalid(token)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized access to resource");
+                return;
+            }
 
             // Load the user details from the database
             UserDetails userDetails = applicationContext.getBean(CustomUserDetailsService.class).loadUserByUsername(username);

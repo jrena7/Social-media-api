@@ -12,4 +12,8 @@ public class InvalidTokenService {
     public void addToken(String token) {
         invalidTokens.add(token);
     }
+
+    public boolean isInvalid(String token) {
+        return invalidTokens.contains(token);
+    }
 }
