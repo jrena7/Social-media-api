@@ -42,3 +42,6 @@ src/main/resources/application.yml
 ### OS-specific files ###
 .DS_Store
 Thumbs.db
+
+### Image Folder ###
+uploads/images
