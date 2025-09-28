@@ -40,7 +40,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotAuthException.class)
     public ResponseEntity<ErrorResponse> handleUserNotAuthException(UserNotAuthException e) {
-        ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), "User not authenticated", HttpStatus.UNAUTHORIZED);
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), "User not authenticated",
+                HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
@@ -55,6 +56,4 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), "Illegal State", HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-
-
 }

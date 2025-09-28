@@ -43,8 +43,8 @@ public class JwtFilter extends OncePerRequestFilter {
             username = jwtService.extractUsername(token);
         }
 
-        // If the username is not null and the user is not already authenticated
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        // If the username is not null
+        if (username != null) {
 
             // Check if the token is invalid
             if (invalidTokenService.isInvalid(token)) {
@@ -55,21 +55,53 @@ public class JwtFilter extends OncePerRequestFilter {
             // Load the user details from the database
             UserDetails userDetails = applicationContext.getBean(CustomUserDetailsService.class).loadUserByUsername(username);
 
-            // Validate the token and set the authentication
+            // Validate the token
             if (jwtService.validateToken(token, userDetails)) {
 
-                // If details are valid, and token is valid, then check if the username in the path matches the username in the token
+                // Check if the username in the path matches the username in the token
                 if (!username.equals(extractUsernameFromPath(request))) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized access to resource");
                     return;
                 }
 
-                UsernamePasswordAuthenticationToken upat =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                upat.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(upat);
+                // If the user is not already authenticated, set the authentication
+                if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                    UsernamePasswordAuthenticationToken upat =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    upat.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(upat);
+                }
             }
         }
+
+
+//        // If the username is not null and the user is not already authenticated
+//        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//
+//            // Check if the token is invalid
+//            if (invalidTokenService.isInvalid(token)) {
+//                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized access to resource");
+//                return;
+//            }
+//
+//            // Load the user details from the database
+//            UserDetails userDetails = applicationContext.getBean(CustomUserDetailsService.class).loadUserByUsername(username);
+//
+//            // Validate the token and set the authentication
+//            if (jwtService.validateToken(token, userDetails)) {
+//
+//                // If details are valid, and token is valid, then check if the username in the path matches the username in the token
+//                if (!username.equals(extractUsernameFromPath(request))) {
+//                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized access to resource");
+//                    return;
+//                }
+//
+//                UsernamePasswordAuthenticationToken upat =
+//                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//                upat.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                SecurityContextHolder.getContext().setAuthentication(upat);
+//            }
+//        }
         filterChain.doFilter(request, response);
     }
 

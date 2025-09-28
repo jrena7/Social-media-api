@@ -1,13 +1,14 @@
 package com.example.socialmedia.model;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
 @Data
-@Document(collection = "messages")
+@Entity
+@Table(name = "messages")
 public class Message {
 
     @Id

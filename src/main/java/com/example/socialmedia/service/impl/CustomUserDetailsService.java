@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        // User role is hardcoded but can be expanded for admin roles in future
+        // User role is hardcoded but can be expanded for admin roles and etc in the future
         GrantedAuthority authority = new SimpleGrantedAuthority("USER");
 
         return new org.springframework.security.core.userdetails.User(
