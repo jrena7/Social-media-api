@@ -34,5 +34,4 @@ public class AuthService {
         // Return token to authenticated user (Valid for 15 minutes)
         return jwtService.generateToken(username);
     }
-
 }

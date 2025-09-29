@@ -1,6 +1,5 @@
 package com.example.socialmedia.service;
 
-
 import com.example.socialmedia.model.Post;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
